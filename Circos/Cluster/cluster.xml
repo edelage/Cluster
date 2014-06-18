@@ -1,0 +1,91 @@
+
+<tool id="Cluster" name="Cluster" version="1.0.0">
+  <description>Visualization with Circos </description>
+
+  <command interpreter="bash">
+    cluster.sh "$input"
+    #if $yesno.choice == "yes"
+        "$yesno.custom"
+	"$yesno.heatmap"
+    #else
+        $yesno.clusdefault "0"
+	$yesno.heatmapdef "0"
+    #end if
+    "$output"
+    "$output2"
+  </command>
+
+  <inputs>
+    <param format="txt" name="input" type="data" label="Dataset"/>
+    <conditional name="yesno">
+      <param name="choice" type="select"  multiple="false" label="Do you want to use your own cluster?">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </param>
+      <when value="yes">
+        <param name="custom" type="data" format="txt" label="Cluster"/>
+	<param name="heatmap" type="data" format="txt" label="Heatmap"/>
+      </when>
+      <when value="no">  
+        <param name="clusdefault" type="hidden"/>
+        <param name="heatmapdef" type="hidden"/>
+      </when>
+  </conditional>
+
+  </inputs>
+
+  <outputs>
+    <data format="png" name="output" />
+    <data format="svg" name="output2" />
+  </outputs>
+
+<help>
+
+**Cluster overview**
+
+Cluster permits to the user to see which cluster is most impacted by the mutation in seeing what genes are differencialy expressed in each cluster. You can use your own cluster or the default cluster. The choice can be made easily in chosing yes or no in the box whiwh ask you if you want to use your own cluster.
+
+The result will be given in png and svg file.
+
+-----
+
+
+**Input**
+
+The input must be a csv file which contain the gene name in this form :
+
+ENSMUSGxxxxxxxx|genename 
+
+ENSMUSGxxxxxxxx|genename
+
+If you want to use your custom heatmap and clusters you have to add your own datas.
+
+To do the heatmap you have to upload a csv file in this form :
+
+clustername,correlation
+
+To use your own clusters you have to upload a csv file in this form :
+
+ENSMUSxxxxxxxxx|genename,modulecolor
+
+ENSMUSxxxxxxxxx|genename,modulecolor
+
+-----
+
+**Output**
+
+This tool will produce 2 identical picture in differents formats.
+
+In the outter ring, we can see the name of each cluster, in the inner ring, we see the color which correspond with the cluster name.
+
+Inner, we see a heatmap. This heatmap is red when the cluster is very correlate with the parameter you want to observe and green when the correlation is weak.
+
+More inner, we see the genes which are differentially expressed, all the genes which are differentially expressed have their name in this ring.
+
+The blue histogram represent the number of genes which are differencially expressed in the cluster.
+
+Then, the green histogram represents the percentage of the clusters gene which are differentially expressed.
+
+</help>
+
+</tool>
